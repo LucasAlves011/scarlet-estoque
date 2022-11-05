@@ -1,6 +1,6 @@
 package com.scarlet.backscarlet.controller;
 
-import com.scarlet.backscarlet.controller.exceptions.PersonNotFoundException;
+import com.scarlet.backscarlet.controller.exceptions.ProdutoNotFoundException;
 import com.scarlet.backscarlet.model.beans.Produto;
 import com.scarlet.backscarlet.service.ProdutoService;
 import org.springframework.http.ResponseEntity;
@@ -37,12 +37,12 @@ public class ProdutoController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Object> getProdutoPorId(@PathVariable int id) throws PersonNotFoundException {
+    public ResponseEntity<Object> getProdutoPorId(@PathVariable int id) throws ProdutoNotFoundException {
        return ResponseEntity.ok().body(produtoService.produtoPorId(id));
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Object> alterarProduto(@PathVariable int id, @RequestBody Produto p) throws PersonNotFoundException {
+    public ResponseEntity<Object> alterarProduto(@PathVariable int id, @RequestBody Produto p) throws ProdutoNotFoundException {
         return ResponseEntity.ok().body(produtoService.alterarProduto(id,p));
     }
 

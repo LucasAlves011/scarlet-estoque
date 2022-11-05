@@ -1,6 +1,5 @@
 package com.scarlet.backscarlet.model.beans;
 
-import com.scarlet.backscarlet.model.Tipo;
 import lombok.Getter;
 import lombok.Setter;
 

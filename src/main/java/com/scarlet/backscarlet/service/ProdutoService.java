@@ -1,6 +1,6 @@
 package com.scarlet.backscarlet.service;
 
-import com.scarlet.backscarlet.controller.exceptions.PersonNotFoundException;
+import com.scarlet.backscarlet.controller.exceptions.ProdutoNotFoundException;
 import com.scarlet.backscarlet.model.beans.Produto;
 import com.scarlet.backscarlet.model.dto.ProdutoAvulsoDTO;
 import com.scarlet.backscarlet.model.dto.ProdutoNominalDTO;
@@ -42,8 +42,8 @@ public class ProdutoService {
         produtoRepository.saveAll(listaProdutos);
     }
 
-    public Object produtoPorId(int id) throws PersonNotFoundException {
-        var x = produtoRepository.findById(id).orElseThrow(() -> new PersonNotFoundException("Produto não encontrado"));
+    public Object produtoPorId(int id) throws ProdutoNotFoundException {
+        var x = produtoRepository.findById(id).orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado"));
 
         if (x.getNominal() != null)
             return new ProdutoNominalDTO(x);
@@ -54,8 +54,8 @@ public class ProdutoService {
     }
 
     // TODO pensar em mudanças de tipo como numerico -> nominal
-    public Object alterarProduto(int id, Produto novoProduto) throws PersonNotFoundException{
-        var antigoProduto = produtoRepository.findById(id).orElseThrow(() -> new PersonNotFoundException("Produto não encontrado"));
+    public Object alterarProduto(int id, Produto novoProduto) throws ProdutoNotFoundException {
+        var antigoProduto = produtoRepository.findById(id).orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado"));
 
         antigoProduto.setNome(novoProduto.getNome());
         antigoProduto.setImagem(novoProduto.getImagem());

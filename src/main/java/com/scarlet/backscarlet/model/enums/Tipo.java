@@ -1,4 +1,4 @@
-package com.scarlet.backscarlet.model;
+package com.scarlet.backscarlet.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
