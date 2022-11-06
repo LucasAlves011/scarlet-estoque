@@ -1,56 +1,55 @@
 package com.scarlet.backscarlet.service;
 
 import com.scarlet.backscarlet.controller.exceptions.ProdutoNotFoundException;
+import com.scarlet.backscarlet.model.beans.Categoria;
 import com.scarlet.backscarlet.model.beans.Produto;
 import com.scarlet.backscarlet.model.dto.ProdutoAvulsoDTO;
+import com.scarlet.backscarlet.model.dto.ProdutoDTO;
 import com.scarlet.backscarlet.model.dto.ProdutoNominalDTO;
 import com.scarlet.backscarlet.model.dto.ProdutoNumericoDTO;
+import com.scarlet.backscarlet.model.repository.CategoriaRepository;
 import com.scarlet.backscarlet.model.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    public ProdutoService(ProdutoRepository produtoRepository) {
+    public ProdutoService(ProdutoRepository produtoRepository,CategoriaRepository categoriaRepository) {
         this.produtoRepository = produtoRepository;
+        this.categoriaRepository = categoriaRepository;
     }
 
     public List<Object> findAllProdutos(){
-        List<Object> retorno =  produtoRepository.findAllAvulso().stream().map(ProdutoAvulsoDTO::new).collect(Collectors.toList());
-        retorno.addAll(produtoRepository.findAllNominal().stream().map(ProdutoNominalDTO::new).collect(Collectors.toList()));
-        retorno.addAll(produtoRepository.findAllNumerico().stream().map(ProdutoNumericoDTO::new).collect(Collectors.toList()));
-        return retorno;
+        List<Produto> retorno =  produtoRepository.findAllAvulso();
+        retorno.addAll(produtoRepository.findAllNominal());
+        retorno.addAll(produtoRepository.findAllNumerico());
+        return retorno.stream().map(this::transformarDTO).collect(Collectors.toList());
     }
 
-    public Object cadastrarProduto(Produto p){
+    public ProdutoDTO cadastrarProduto(Produto p){
+        //Todo Retornar uma exceção quando não encontrar uma categoria
+        var cats = p.getCategorias().stream().map(pr -> categoriaRepository.findByNome(pr.getNome())).collect(Collectors.toList());
+        p.setCategorias(cats);
         produtoRepository.save(p);
-
-        if (p.getNominal() != null)
-            return new ProdutoNominalDTO(p);
-        else if (p.getAvulso() != null)
-            return new ProdutoAvulsoDTO(p);
-        else
-            return new ProdutoNumericoDTO(p);
+        return transformarDTO(p);
     }
 
     public void cadastrarProdutos(List<Produto> listaProdutos){
-        produtoRepository.saveAll(listaProdutos);
+        listaProdutos.forEach(this::cadastrarProduto);
+//        produtoRepository.saveAll(listaProdutos);
     }
 
     public Object produtoPorId(int id) throws ProdutoNotFoundException {
         var x = produtoRepository.findById(id).orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado"));
-
-        if (x.getNominal() != null)
-            return new ProdutoNominalDTO(x);
-        else if (x.getAvulso() != null)
-            return new ProdutoAvulsoDTO(x);
-        else
-            return new ProdutoNumericoDTO(x);
+       return transformarDTO(x);
     }
 
     // TODO pensar em mudanças de tipo como numerico -> nominal
@@ -59,7 +58,7 @@ public class ProdutoService {
 
         antigoProduto.setNome(novoProduto.getNome());
         antigoProduto.setImagem(novoProduto.getImagem());
-        antigoProduto.setCategoria(novoProduto.getCategoria());
+        antigoProduto.setCategorias(novoProduto.getCategorias());
         antigoProduto.setValor(novoProduto.getValor());
         
         if (antigoProduto.getAvulso() != null){
@@ -81,6 +80,21 @@ public class ProdutoService {
         }
 
         return  produtoRepository.save(antigoProduto);
+    }
+
+    public List<ProdutoDTO> findByCategoria(Categoria c){
+        return produtoRepository.findByCategorias(c).stream().map(this::transformarDTO).collect(Collectors.toList());
+    }
+
+    public ProdutoDTO transformarDTO(Produto produto){
+        if (produto.getNominal() != null)
+            return new ProdutoNominalDTO(produto);
+        else if (produto.getAvulso() != null)
+            return new ProdutoAvulsoDTO(produto);
+        else if(produto.getNumerico() != null)
+            return new ProdutoNumericoDTO(produto);
+        else
+            return null; //TODO retornar uma exception com uma erro específico
     }
 
 }

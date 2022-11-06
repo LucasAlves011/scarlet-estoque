@@ -1,19 +1,15 @@
 package com.scarlet.backscarlet.model.dto;
 
-
+import com.scarlet.backscarlet.model.beans.Categoria;
 import com.scarlet.backscarlet.model.beans.Produto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
-public class ProdutoNumericoDTO {
-    private String nome;
-    private String categoria;
-    private byte[] imagem;
-    private double valor;
-//    private Tipo tipo;
-    private int quantidade;
+public class ProdutoNumericoDTO extends ProdutoDTO{
     private int t36;
     private int t38;
     private int t40;
@@ -24,12 +20,8 @@ public class ProdutoNumericoDTO {
     private int t50;
 
     public ProdutoNumericoDTO(Produto p) {
-        this.nome = p.getNome();
-        this.categoria = p.getCategoria();
-        this.imagem = p.getImagem();
-        this.valor = p.getValor();
-//        this.tipo = p.getTipo();
-        this.quantidade = p.getNumerico().getQuantidade();
+        super(p.getNome(),p.getCategorias().stream().map(Categoria::getNome).collect(Collectors.toList()),
+                p.getImagem(),p.getValor(),p.getNumerico().getQuantidade());
         this.t36 = p.getNumerico().getT36();
         this.t38 = p.getNumerico().getT38();
         this.t40 = p.getNumerico().getT40();

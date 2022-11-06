@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,9 +21,10 @@ public class Produto {
 
     private double valor;
 
-    @Column(name = "categoria_nome")
-    @JoinColumn(table = "categoria",name = "nome")
-    private String categoria;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "produto_categorias",joinColumns = @JoinColumn(name = "produto_id")
+            ,inverseJoinColumns = @JoinColumn(name = "categoria_nome"))
+    private List<Categoria> categorias;
 
 //    @Enumerated(EnumType.STRING)
 //    @Column(name = "tipo")
@@ -36,6 +38,5 @@ public class Produto {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Avulso avulso;
-
 
 }

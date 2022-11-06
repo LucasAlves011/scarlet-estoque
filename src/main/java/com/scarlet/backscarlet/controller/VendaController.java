@@ -20,7 +20,7 @@ public class VendaController {
 
     @GetMapping()
     public void vender() throws ProdutoNotFoundException {
-        vendaService.vender(null);
+//        vendaService.vender(null);
     }
 
 }

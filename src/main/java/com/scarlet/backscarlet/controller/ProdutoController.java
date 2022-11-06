@@ -1,7 +1,9 @@
 package com.scarlet.backscarlet.controller;
 
 import com.scarlet.backscarlet.controller.exceptions.ProdutoNotFoundException;
+import com.scarlet.backscarlet.model.beans.Categoria;
 import com.scarlet.backscarlet.model.beans.Produto;
+import com.scarlet.backscarlet.model.dto.ProdutoDTO;
 import com.scarlet.backscarlet.service.ProdutoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +27,8 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> cadastrarProduto(@RequestBody Produto p){
-        produtoService.cadastrarProduto(p);
-        return ResponseEntity.created(URI.create("/produto"+p.getId())).body(p);
+    public ResponseEntity<ProdutoDTO> cadastrarProduto(@RequestBody Produto p){
+        return ResponseEntity.created(URI.create("/produto"+p.getId())).body(produtoService.cadastrarProduto(p));
     }
 
     @PostMapping("/*")
@@ -46,5 +47,8 @@ public class ProdutoController {
         return ResponseEntity.ok().body(produtoService.alterarProduto(id,p));
     }
 
-
+    @GetMapping("/categoria")
+    public ResponseEntity<List<ProdutoDTO>> findCategoria(@RequestBody Categoria c){
+        return ResponseEntity.ok().body(produtoService.findByCategoria(c));
+    }
 }
