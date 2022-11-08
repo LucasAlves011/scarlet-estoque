@@ -11,4 +11,21 @@ import javax.persistence.*;
 public class Categoria {
     @Id
     private String nome;
+
+    @Override
+    public String toString() {
+        return  nome ;
+
+    }
+
+    public Categoria(String nome) {
+        this.nome = nome;
+    }
+
+    public Categoria() {
+    }
+
+    public boolean verificarPorNome(String nome){
+        return nome.equals(this.nome);
+    }
 }

@@ -1,4 +1,4 @@
-package com.scarlet.backscarlet.model.dto;
+package com.scarlet.backscarlet.model.dto.produto;
 
 import com.scarlet.backscarlet.model.beans.Categoria;
 import com.scarlet.backscarlet.model.beans.Produto;
@@ -20,7 +20,7 @@ public class ProdutoNumericoDTO extends ProdutoDTO{
     private int t50;
 
     public ProdutoNumericoDTO(Produto p) {
-        super(p.getNome(),p.getCategorias().stream().map(Categoria::getNome).collect(Collectors.toList()),
+        super(p.getId(),p.getNome(),p.getCategorias().stream().map(Categoria::getNome).collect(Collectors.toList()),
                 p.getImagem(),p.getValor(),p.getNumerico().getQuantidade());
         this.t36 = p.getNumerico().getT36();
         this.t38 = p.getNumerico().getT38();

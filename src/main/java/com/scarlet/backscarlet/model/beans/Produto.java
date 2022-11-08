@@ -39,4 +39,10 @@ public class Produto {
     @OneToOne(cascade = CascadeType.ALL)
     private Avulso avulso;
 
+    public void adicionarUmaCategoria(Categoria c){
+        categorias.add(c);
+    }
+
+    public void removerUmaCategoria(Categoria c) { categorias.remove(c);}
+
 }

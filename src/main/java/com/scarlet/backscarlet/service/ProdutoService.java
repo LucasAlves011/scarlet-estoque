@@ -1,18 +1,20 @@
 package com.scarlet.backscarlet.service;
 
-import com.scarlet.backscarlet.controller.exceptions.ProdutoNotFoundException;
+import com.scarlet.backscarlet.controller.exceptions.ObjectNotFoundException;
 import com.scarlet.backscarlet.model.beans.Categoria;
 import com.scarlet.backscarlet.model.beans.Produto;
-import com.scarlet.backscarlet.model.dto.ProdutoAvulsoDTO;
-import com.scarlet.backscarlet.model.dto.ProdutoDTO;
-import com.scarlet.backscarlet.model.dto.ProdutoNominalDTO;
-import com.scarlet.backscarlet.model.dto.ProdutoNumericoDTO;
+import com.scarlet.backscarlet.model.dto.produto.ProdutoAvulsoDTO;
+import com.scarlet.backscarlet.model.dto.produto.ProdutoDTO;
+import com.scarlet.backscarlet.model.dto.produto.ProdutoNominalDTO;
+import com.scarlet.backscarlet.model.dto.produto.ProdutoNumericoDTO;
 import com.scarlet.backscarlet.model.repository.CategoriaRepository;
 import com.scarlet.backscarlet.model.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,14 +49,14 @@ public class ProdutoService {
 //        produtoRepository.saveAll(listaProdutos);
     }
 
-    public Object produtoPorId(int id) throws ProdutoNotFoundException {
-        var x = produtoRepository.findById(id).orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado"));
+    public Object produtoPorId(int id) throws ObjectNotFoundException {
+        var x = produtoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado"));
        return transformarDTO(x);
     }
 
     // TODO pensar em mudanças de tipo como numerico -> nominal
-    public Object alterarProduto(int id, Produto novoProduto) throws ProdutoNotFoundException {
-        var antigoProduto = produtoRepository.findById(id).orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado"));
+    public Object alterarProduto(int id, Produto novoProduto) throws ObjectNotFoundException {
+        var antigoProduto = produtoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado"));
 
         antigoProduto.setNome(novoProduto.getNome());
         antigoProduto.setImagem(novoProduto.getImagem());
@@ -82,9 +84,34 @@ public class ProdutoService {
         return  produtoRepository.save(antigoProduto);
     }
 
-    public List<ProdutoDTO> findByCategoria(Categoria c){
-        return produtoRepository.findByCategorias(c).stream().map(this::transformarDTO).collect(Collectors.toList());
+    public List<ProdutoDTO> findByCategoria(String c){
+        var categoria = new Categoria();
+        categoria.setNome(c);
+        return produtoRepository.findByCategorias(categoria).stream().map(this::transformarDTO).collect(Collectors.toList());
     }
+
+    public ProdutoDTO alterarCategorias(int id,List<String> novasCategorias) throws ObjectNotFoundException {
+        var x = produtoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Produto de id " + id + "não encontrado."));
+        var todasCategorias = categoriaRepository.findAll();
+
+        novasCategorias.forEach(c -> {
+            if (!todasCategorias.stream().map(Categoria::toString).toList().contains(c.toUpperCase()))
+                throw new ObjectNotFoundException("Categoria de nome "+ c + " não é uma categoria cadastrada.");
+        });
+
+        var novasCats = novasCategorias.stream().map(String::toUpperCase)
+                .map(c -> todasCategorias.stream().filter(a -> a.verificarPorNome(c)).findFirst().get()).toList();
+
+        var precisamSair = x.getCategorias().stream().filter(Predicate.not(novasCats::contains)).toList();
+
+        var precisamEntrar = novasCats.stream().filter(Predicate.not(x.getCategorias()::contains)).toList();
+
+        precisamSair.forEach(x::removerUmaCategoria);
+        precisamEntrar.forEach(x::adicionarUmaCategoria);
+
+        return transformarDTO(x);
+    }
+
 
     public ProdutoDTO transformarDTO(Produto produto){
         if (produto.getNominal() != null)

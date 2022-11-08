@@ -1,4 +1,4 @@
-package com.scarlet.backscarlet.model.dto;
+package com.scarlet.backscarlet.model.dto.produto;
 
 import com.scarlet.backscarlet.model.beans.Categoria;
 import com.scarlet.backscarlet.model.beans.Produto;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class ProdutoAvulsoDTO extends ProdutoDTO{
 
     public ProdutoAvulsoDTO(Produto p) {
-        super(p.getNome(),p.getCategorias().stream().map(Categoria::getNome).collect(Collectors.toList()),
+        super(p.getId(),p.getNome(),p.getCategorias().stream().map(Categoria::getNome).collect(Collectors.toList()),
                 p.getImagem(),p.getValor(),p.getAvulso().getQuantidade());
     }
 }

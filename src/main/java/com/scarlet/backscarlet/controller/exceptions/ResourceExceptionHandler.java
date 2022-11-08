@@ -12,8 +12,8 @@ import java.time.ZoneId ;
 @ControllerAdvice
 public class ResourceExceptionHandler {
 
-    @ExceptionHandler(ProdutoNotFoundException.class)
-    ResponseEntity<StandardException> objectNotFoundException(ProdutoNotFoundException e, ServletRequest request){
+    @ExceptionHandler(ObjectNotFoundException.class)
+    ResponseEntity<StandardException> objectNotFoundException(ObjectNotFoundException e, ServletRequest request){
         StandardException error = new StandardException(LocalDateTime.now(ZoneId.of("UTC")), HttpStatus.NOT_FOUND.value()
                 , e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);

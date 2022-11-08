@@ -1,14 +1,9 @@
 package com.scarlet.backscarlet.service;
 
-import com.scarlet.backscarlet.controller.exceptions.ProdutoNotFoundException;
-import com.scarlet.backscarlet.model.beans.Produto;
-import com.scarlet.backscarlet.model.beans.SolicitarItem;
 import com.scarlet.backscarlet.model.repository.ItemRepository;
 import com.scarlet.backscarlet.model.repository.ProdutoRepository;
 import com.scarlet.backscarlet.model.repository.VendaRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class VendaService {

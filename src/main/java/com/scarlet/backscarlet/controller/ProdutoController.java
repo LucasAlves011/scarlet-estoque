@@ -1,14 +1,17 @@
 package com.scarlet.backscarlet.controller;
 
-import com.scarlet.backscarlet.controller.exceptions.ProdutoNotFoundException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.scarlet.backscarlet.controller.exceptions.ObjectNotFoundException;
 import com.scarlet.backscarlet.model.beans.Categoria;
 import com.scarlet.backscarlet.model.beans.Produto;
-import com.scarlet.backscarlet.model.dto.ProdutoDTO;
+import com.scarlet.backscarlet.model.dto.produto.ProdutoDTO;
 import com.scarlet.backscarlet.service.ProdutoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,11 +22,6 @@ public class ProdutoController {
 
     public ProdutoController(ProdutoService produtoService) {
         this.produtoService = produtoService;
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Object>> getProdutos(){
-        return ResponseEntity.ok().body(produtoService.findAllProdutos());
     }
 
     @PostMapping
@@ -37,18 +35,28 @@ public class ProdutoController {
         return ResponseEntity.ok().body(null);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Object> getProdutoPorId(@PathVariable int id) throws ProdutoNotFoundException {
-       return ResponseEntity.ok().body(produtoService.produtoPorId(id));
-    }
-
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Object> alterarProduto(@PathVariable int id, @RequestBody Produto p) throws ProdutoNotFoundException {
+    public ResponseEntity<Object> alterarProduto(@PathVariable int id, @RequestBody Produto p) throws ObjectNotFoundException {
         return ResponseEntity.ok().body(produtoService.alterarProduto(id,p));
     }
 
+    @GetMapping
+    public ResponseEntity<List<Object>> getProdutos(){
+        return ResponseEntity.ok().body(produtoService.findAllProdutos());
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Object> getProdutoPorId(@PathVariable int id) throws ObjectNotFoundException {
+       return ResponseEntity.ok().body(produtoService.produtoPorId(id));
+    }
+
     @GetMapping("/categoria")
-    public ResponseEntity<List<ProdutoDTO>> findCategoria(@RequestBody Categoria c){
-        return ResponseEntity.ok().body(produtoService.findByCategoria(c));
+    public ResponseEntity<List<ProdutoDTO>> findByCategoria(@PathParam("categoria") String categoria){
+        return ResponseEntity.ok().body(produtoService.findByCategoria(categoria));
+    }
+
+    @PutMapping(value = "/{id}/categorias")
+    public ResponseEntity<ProdutoDTO> alterarCategorias(@PathVariable int id, @RequestBody ArrayList<String> categorias) throws ObjectNotFoundException {
+        return ResponseEntity.ok().body(produtoService.alterarCategorias(id,categorias));
     }
 }
