@@ -3,10 +3,7 @@ package com.scarlet.backscarlet.service;
 import com.scarlet.backscarlet.controller.exceptions.ObjectNotFoundException;
 import com.scarlet.backscarlet.model.beans.Categoria;
 import com.scarlet.backscarlet.model.beans.Produto;
-import com.scarlet.backscarlet.model.dto.produto.ProdutoAvulsoDTO;
-import com.scarlet.backscarlet.model.dto.produto.ProdutoDTO;
-import com.scarlet.backscarlet.model.dto.produto.ProdutoNominalDTO;
-import com.scarlet.backscarlet.model.dto.produto.ProdutoNumericoDTO;
+import com.scarlet.backscarlet.model.dto.produto.*;
 import com.scarlet.backscarlet.model.repository.CategoriaRepository;
 import com.scarlet.backscarlet.model.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
@@ -37,8 +34,9 @@ public class ProdutoService {
     }
 
     public ProdutoDTO cadastrarProduto(Produto p){
-        //Todo Retornar uma exceção quando não encontrar uma categoria
-        var cats = p.getCategorias().stream().map(pr -> categoriaRepository.findByNome(pr.getNome())).collect(Collectors.toList());
+        var cats = p.getCategorias().stream().map(pr -> Optional.ofNullable(categoriaRepository.findByNome(pr.getNome()))
+                .orElseThrow( () -> new ObjectNotFoundException("Categoria de nome "+ pr.getNome() + " não é uma categoria cadastrada.")))
+                .collect(Collectors.toList());
         p.setCategorias(cats);
         produtoRepository.save(p);
         return transformarDTO(p);
@@ -46,23 +44,21 @@ public class ProdutoService {
 
     public void cadastrarProdutos(List<Produto> listaProdutos){
         listaProdutos.forEach(this::cadastrarProduto);
-//        produtoRepository.saveAll(listaProdutos);
     }
 
     public Object produtoPorId(int id) throws ObjectNotFoundException {
-        var x = produtoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado"));
+       var x = produtoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado"));
        return transformarDTO(x);
     }
 
-    // TODO pensar em mudanças de tipo como numerico -> nominal
-    public Object alterarProduto(int id, Produto novoProduto) throws ObjectNotFoundException {
+    public ProdutoDTO alterarProduto(int id, ProdutoInputDTO novoProduto) throws ObjectNotFoundException {
         var antigoProduto = produtoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado"));
 
         antigoProduto.setNome(novoProduto.getNome());
         antigoProduto.setImagem(novoProduto.getImagem());
-        antigoProduto.setCategorias(novoProduto.getCategorias());
+        modificarCategoria(novoProduto.getCategorias(),antigoProduto);
         antigoProduto.setValor(novoProduto.getValor());
-        
+
         if (antigoProduto.getAvulso() != null){
             antigoProduto.getAvulso().setQuantidade(novoProduto.getAvulso().getQuantidade());
         } else if (antigoProduto.getNominal() != null) {
@@ -81,7 +77,7 @@ public class ProdutoService {
             antigoProduto.getNumerico().setT50(novoProduto.getNumerico().getT50());
         }
 
-        return  produtoRepository.save(antigoProduto);
+        return  transformarDTO(produtoRepository.save(antigoProduto));
     }
 
     public List<ProdutoDTO> findByCategoria(String c){
@@ -99,8 +95,19 @@ public class ProdutoService {
                 throw new ObjectNotFoundException("Categoria de nome "+ c + " não é uma categoria cadastrada.");
         });
 
-        var novasCats = novasCategorias.stream().map(String::toUpperCase)
+        modificarCategoria(novasCategorias, x);
+
+        return transformarDTO(x);
+    }
+
+    private List<Categoria> transformarStringsEmCategoria(List<String> novasCategorias) {
+        var todasCategorias = categoriaRepository.findAll();
+        return novasCategorias.stream().map(String::toUpperCase)
                 .map(c -> todasCategorias.stream().filter(a -> a.verificarPorNome(c)).findFirst().get()).toList();
+    }
+
+    private void modificarCategoria(List<String> novasCategorias, Produto x) {
+        var novasCats = transformarStringsEmCategoria(novasCategorias);
 
         var precisamSair = x.getCategorias().stream().filter(Predicate.not(novasCats::contains)).toList();
 
@@ -108,12 +115,9 @@ public class ProdutoService {
 
         precisamSair.forEach(x::removerUmaCategoria);
         precisamEntrar.forEach(x::adicionarUmaCategoria);
-
-        return transformarDTO(x);
     }
 
-
-    public ProdutoDTO transformarDTO(Produto produto){
+    private ProdutoDTO transformarDTO(Produto produto){
         if (produto.getNominal() != null)
             return new ProdutoNominalDTO(produto);
         else if (produto.getAvulso() != null)

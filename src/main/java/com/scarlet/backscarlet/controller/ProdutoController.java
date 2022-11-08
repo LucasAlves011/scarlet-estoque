@@ -1,10 +1,9 @@
 package com.scarlet.backscarlet.controller;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.scarlet.backscarlet.controller.exceptions.ObjectNotFoundException;
-import com.scarlet.backscarlet.model.beans.Categoria;
 import com.scarlet.backscarlet.model.beans.Produto;
 import com.scarlet.backscarlet.model.dto.produto.ProdutoDTO;
+import com.scarlet.backscarlet.model.dto.produto.ProdutoInputDTO;
 import com.scarlet.backscarlet.service.ProdutoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +35,7 @@ public class ProdutoController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Object> alterarProduto(@PathVariable int id, @RequestBody Produto p) throws ObjectNotFoundException {
+    public ResponseEntity<ProdutoDTO> alterarProduto(@PathVariable int id, @RequestBody ProdutoInputDTO p) throws ObjectNotFoundException {
         return ResponseEntity.ok().body(produtoService.alterarProduto(id,p));
     }
 

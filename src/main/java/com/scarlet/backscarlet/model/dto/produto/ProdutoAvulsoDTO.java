@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class ProdutoAvulsoDTO extends ProdutoDTO{
-
     public ProdutoAvulsoDTO(Produto p) {
         super(p.getId(),p.getNome(),p.getCategorias().stream().map(Categoria::getNome).collect(Collectors.toList()),
                 p.getImagem(),p.getValor(),p.getAvulso().getQuantidade());
