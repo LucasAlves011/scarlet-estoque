@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Getter
@@ -21,6 +22,7 @@ public class Produto {
 
     private byte[] imagem;
 
+    @PositiveOrZero
     private double valor;
 
     @ManyToMany(cascade = CascadeType.ALL)

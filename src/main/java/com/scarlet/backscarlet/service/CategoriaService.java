@@ -24,31 +24,31 @@ public class CategoriaService {
     }
 
     public Categoria cadastrarCategoria(String categoria) throws IllegalArgumentException{
-       if (categoria == null ||categoria.isBlank())
-            throw new InvalidParameterException("Categoria não pode ser vazia.");
-       if (categoriaRepository.findAll().stream().map(Categoria::toString).anyMatch(a -> a.equals(categoria.toUpperCase())))
-           throw new IllegalArgumentException("Categoria de nome " + categoria + " ja existe. Tente utilizá-la.");
-
-       // TODO Implementar exception que remove a possibilidade de cadastrar uma categoria como @,!,"    (somente caracteres especias)
+        verificarValidadeCategoria(categoria);
 
         var x = new Categoria();
         x.setNome(categoria.toUpperCase());
         return categoriaRepository.save(x);
     }
 
+    private void verificarValidadeCategoria(String categoria) {
+        if (categoria == null || categoria.isBlank())
+             throw new InvalidParameterException("Categoria não pode ser vazia.");
+        if (categoria.matches("\\W+"))
+            throw new InvalidParameterException("Categoria não pode conter caracteres especiais.");
+        if (categoriaRepository.findAll().stream().map(Categoria::toString).anyMatch(a -> a.equals(categoria.toUpperCase())))
+            throw new IllegalArgumentException("Categoria de nome '" + categoria + "' já existe. Tente utilizá-la.");
+    }
+
     public void deleteCategoria(String nome) throws ObjectNotFoundException {
         var x = Optional.ofNullable(categoriaRepository.findByNome(nome))
-                .orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada de nome" + nome +" não encontrada."));
+                .orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada de nome'" + nome + "' não encontrada."));
         categoriaRepository.delete(x);
     }
 
     public String alterarCategoria(String nomeAntigo,String nomeNovo) throws ObjectNotFoundException,IllegalArgumentException{
-        if (nomeNovo == null ||nomeNovo.isBlank())
-            throw new InvalidParameterException("Categoria não pode ser vazia.");
-        if (categoriaRepository.findAll().stream().map(Categoria::toString).anyMatch(a -> a.equals(nomeNovo.toUpperCase())))
-            throw new IllegalArgumentException("Categoria de nome " + nomeNovo + " ja existe. Tente utilizá-la.");
-
-        var x = Optional.ofNullable(categoriaRepository.findByNome(nomeAntigo)).orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada de nome" + nomeAntigo +" não encontrada."));
+        verificarValidadeCategoria(nomeNovo);
+        var x = Optional.ofNullable(categoriaRepository.findByNome(nomeAntigo)).orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada de nome'" + nomeAntigo +"' não encontrada."));
         x.setNome(nomeNovo.toUpperCase());
         categoriaRepository.save(x);
         return x.toString();
