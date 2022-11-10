@@ -34,4 +34,11 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    @ExceptionHandler(TamanhoIncompativelException.class)
+    ResponseEntity<StandardException> objectNotFoundException(TamanhoIncompativelException e, ServletRequest request){
+        StandardException error = new StandardException(LocalDateTime.now(ZoneId.of("UTC")), HttpStatus.BAD_REQUEST.value()
+                , e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
 }

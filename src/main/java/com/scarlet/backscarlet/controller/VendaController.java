@@ -1,6 +1,5 @@
 package com.scarlet.backscarlet.controller;
 
-import com.scarlet.backscarlet.controller.exceptions.ObjectNotFoundException;
 import com.scarlet.backscarlet.service.VendaService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +16,8 @@ public class VendaController {
     }
 
     @GetMapping()
-    public void vender() throws ObjectNotFoundException {
-//        vendaService.vender(null);
+    public void verificarSeItem(int idProduto)  {
+
     }
 
 }
