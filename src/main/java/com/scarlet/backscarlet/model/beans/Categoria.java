@@ -1,5 +1,6 @@
 package com.scarlet.backscarlet.model.beans;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,6 @@ public class Categoria {
     @Override
     public String toString() {
         return  nome ;
-
     }
 
     public Categoria(String nome) {

@@ -1,6 +1,7 @@
 package com.scarlet.backscarlet.model.beans;
 
 import com.scarlet.backscarlet.model.enums.TipoPagamento;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class Venda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private int id;
 
     @Column(updatable = false)
@@ -27,7 +29,9 @@ public class Venda {
     @Column(name = "tipo")
     private TipoPagamento tipoPagamento;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = Item.class)
+    @JoinTable(name = "venda_itens",joinColumns = @JoinColumn(name = "venda_id")
+            ,inverseJoinColumns = @JoinColumn(name = "item_id"))
     private List<Item> itens;
 
 }

@@ -1,9 +1,14 @@
 package com.scarlet.backscarlet.controller;
 
+import com.scarlet.backscarlet.model.beans.SolicitarItem;
+import com.scarlet.backscarlet.model.dto.VendaDTO;
+import com.scarlet.backscarlet.model.enums.TipoPagamento;
 import com.scarlet.backscarlet.service.VendaService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.websocket.server.PathParam;
+import java.util.List;
 
 @RestController
 @RequestMapping("/venda")
@@ -15,9 +20,9 @@ public class VendaController {
         this.vendaService = vendaService;
     }
 
-    @GetMapping()
-    public void verificarSeItem(int idProduto)  {
-
+    @PostMapping()
+    public ResponseEntity<VendaDTO> verificarSeItem(@PathParam("tipoPagamento") TipoPagamento tipoPagamento , @RequestBody List<SolicitarItem> solicitarItemList )  {
+        return ResponseEntity.ok().body(vendaService.fecharVenda(solicitarItemList,tipoPagamento));
     }
 
 }

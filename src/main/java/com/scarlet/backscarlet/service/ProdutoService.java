@@ -100,6 +100,12 @@ public class ProdutoService {
         return transformarDTO(x);
     }
 
+    public List<ProdutoDTO> findByNome(String nome){
+        var x = produtoRepository.findByNomeLike(nome);
+       return x.stream().map(this::transformarDTO).collect(Collectors.toList());
+    }
+
+
     private List<Categoria> transformarStringsEmCategoria(List<String> novasCategorias) {
         var todasCategorias = categoriaRepository.findAll();
         return novasCategorias.stream().map(String::toUpperCase)

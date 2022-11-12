@@ -1,9 +1,7 @@
 package com.scarlet.backscarlet.controller;
 
-import com.scarlet.backscarlet.model.enums.Tamanho;
-import com.scarlet.backscarlet.model.repository.ItemRepository;
+import com.scarlet.backscarlet.model.enums.TamanhoEnum;
 import com.scarlet.backscarlet.service.ItemService;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,8 +19,8 @@ public class ItemController {
     }
 
     @PostMapping
-    public boolean verificarDisponibilidade(int produtoId, Tamanho tamanho, int unidades){
-        return itemService.verificarDisponibilidade(produtoId,tamanho,unidades);
+    public boolean verificarDisponibilidade(int produtoId, TamanhoEnum tamanhoEnum, int unidades){
+        return itemService.verificarDisponibilidade(produtoId, tamanhoEnum,unidades);
     }
 
 

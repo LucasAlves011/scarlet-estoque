@@ -1,5 +1,6 @@
 package com.scarlet.backscarlet.model.beans;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ public class Avulso {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private int id;
 
     @Column

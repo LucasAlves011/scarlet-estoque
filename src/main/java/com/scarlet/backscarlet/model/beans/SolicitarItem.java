@@ -1,7 +1,7 @@
 package com.scarlet.backscarlet.model.beans;
 
 
-import com.scarlet.backscarlet.model.enums.Tamanho;
+import com.scarlet.backscarlet.model.enums.TamanhoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +13,6 @@ public class SolicitarItem {
 
     private int idProduto;
     private int quantidade;
-    private Tamanho tamanho;
+    private TamanhoEnum tamanho;
 
 }
