@@ -54,6 +54,11 @@ public class ProdutoController {
         return ResponseEntity.ok().body(produtoService.findByCategoria(categoria));
     }
 
+    @GetMapping("/nome")
+    public ResponseEntity<List<ProdutoDTO>> findProdutoByNome(@PathParam("nome") String nome){
+        return ResponseEntity.ok().body(produtoService.findByNome(nome));
+    }
+
     @PutMapping(value = "/{id}/categorias")
     public ResponseEntity<ProdutoDTO> alterarCategorias(@PathVariable int id, @RequestBody ArrayList<String> categorias) throws ObjectNotFoundException {
         return ResponseEntity.ok().body(produtoService.alterarCategorias(id,categorias));
