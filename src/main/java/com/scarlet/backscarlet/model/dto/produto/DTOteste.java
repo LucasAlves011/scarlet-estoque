@@ -6,13 +6,15 @@ import com.scarlet.backscarlet.model.beans.Numerico;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class ProdutoInputDTO {
+@ToString
+public class DTOteste {
 
     private String nome;
 
@@ -22,10 +24,10 @@ public class ProdutoInputDTO {
 
     private List<String> categorias;
 
-    private Nominal nominal;
+//    private Nominal nominal;
 //
-    private Numerico numerico;
+//    private Numerico numerico;
 //
-    private Avulso avulso;
+//    private Avulso avulso;
 
 }

@@ -21,7 +21,7 @@ public class ProdutoNumericoDTO extends ProdutoDTO{
 
     public ProdutoNumericoDTO(Produto p) {
         super(p.getId(),p.getNome(),p.getCategorias().stream().map(Categoria::getNome).collect(Collectors.toList()),
-                p.getImagem(),p.getValor(),p.getNumerico().getQuantidade());
+                p.getImagem(),p.getValor(),p.getNumerico().getQuantidade(),p.getMarca(),"numerico");
         this.t36 = p.getNumerico().getT36();
         this.t38 = p.getNumerico().getT38();
         this.t40 = p.getNumerico().getT40();
