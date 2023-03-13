@@ -4,10 +4,10 @@ import com.scarlet.backscarlet.model.beans.SolicitarItem;
 import com.scarlet.backscarlet.model.dto.VendaDTO;
 import com.scarlet.backscarlet.model.enums.TipoPagamento;
 import com.scarlet.backscarlet.service.VendaService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController

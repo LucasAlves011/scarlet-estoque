@@ -4,13 +4,13 @@ import com.scarlet.backscarlet.controller.exceptions.ErroCoringaException;
 import com.scarlet.backscarlet.controller.exceptions.ObjectNotFoundException;
 import com.scarlet.backscarlet.controller.exceptions.TamanhoIncompativelException;
 import com.scarlet.backscarlet.model.enums.TamanhoEnum;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.Optional;
 

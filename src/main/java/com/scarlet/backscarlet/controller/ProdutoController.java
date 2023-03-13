@@ -6,12 +6,12 @@ import com.scarlet.backscarlet.model.dto.produto.ProdutoDTO;
 import com.scarlet.backscarlet.model.dto.produto.ProdutoInputDTO;
 import com.scarlet.backscarlet.model.dto.produto.RetornoQuantidadesPorMarca;
 import com.scarlet.backscarlet.service.ProdutoService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
