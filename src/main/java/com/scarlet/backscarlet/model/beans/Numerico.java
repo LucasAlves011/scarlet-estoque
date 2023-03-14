@@ -1,14 +1,13 @@
 package com.scarlet.backscarlet.model.beans;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 @Entity(name = "numerico")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Numerico {
 
     @Id
@@ -43,4 +42,14 @@ public class Numerico {
     @Column(name = "`50`")
     private int t50;
 
+    public Numerico(int t36, int t38, int t40, int t42, int t44, int t46, int t48, int t50) {
+        this.t36 = t36;
+        this.t38 = t38;
+        this.t40 = t40;
+        this.t42 = t42;
+        this.t44 = t44;
+        this.t46 = t46;
+        this.t48 = t48;
+        this.t50 = t50;
+    }
 }

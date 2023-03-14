@@ -4,6 +4,7 @@ import com.scarlet.backscarlet.controller.exceptions.ErroCoringaException;
 import com.scarlet.backscarlet.controller.exceptions.ObjectNotFoundException;
 import com.scarlet.backscarlet.controller.exceptions.TamanhoIncompativelException;
 import com.scarlet.backscarlet.model.enums.TamanhoEnum;
+import com.scarlet.backscarlet.model.enums.Tipo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -39,9 +40,9 @@ public class Produto {
             , inverseJoinColumns = @JoinColumn(name = "categoria_nome"))
     private List<Categoria> categorias;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "tipo")
-//    private Tipo tipo;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo")
+    private Tipo tipo;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Nominal nominal;

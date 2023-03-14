@@ -4,6 +4,7 @@ import com.scarlet.backscarlet.controller.exceptions.ObjectNotFoundException;
 import com.scarlet.backscarlet.model.beans.Categoria;
 import com.scarlet.backscarlet.model.beans.Produto;
 import com.scarlet.backscarlet.model.dto.produto.*;
+import com.scarlet.backscarlet.model.enums.Tipo;
 import com.scarlet.backscarlet.model.repository.CategoriaRepository;
 import com.scarlet.backscarlet.model.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
@@ -62,10 +63,6 @@ public class ProdutoService {
 
         return transformarDTO(pr);
     }
-
-//    public void cadastrarProdutos(List<Produto> listaProdutos){
-//        listaProdutos.forEach(this::cadastrarProduto);
-//    }
 
     public Object produtoPorId(int id) throws ObjectNotFoundException {
         var x = produtoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado"));
@@ -164,6 +161,12 @@ public class ProdutoService {
         t.setNumerico(p.getNumerico());
         t.setMarca(p.getMarca() == null ? null : p.getMarca().toUpperCase());
         t.setValor(p.getValor());
+
+        switch (p.getTipo().toUpperCase()){
+            case "AVULSO" -> t.setTipo(Tipo.AVULSO);
+            case "NOMINAL" -> t.setTipo(Tipo.NOMINAL);
+            case "NUMERICO" -> t.setTipo(Tipo.NUMERICO);
+        }
 
         if (categorias == null)
             t.setCategorias(transformarStringsEmCategoria(p.getCategorias()));

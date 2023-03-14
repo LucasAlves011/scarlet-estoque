@@ -22,10 +22,21 @@ public class ProdutoInputDTO {
 
     private List<String> categorias;
 
+    private String tipo;
     private Nominal nominal;
-//
     private Numerico numerico;
-//
     private Avulso avulso;
 
+    @Override
+    public String toString() {
+        return "ProdutoInputDTO{" +
+                "nome='" + nome + '\'' +
+                ", marca='" + marca + '\'' +
+                ", valor=" + valor +
+                ", categorias=" + categorias +
+                ", nominal=" + nominal +
+                ", numerico=" + numerico +
+                ", avulso=" + avulso +
+                '}';
+    }
 }

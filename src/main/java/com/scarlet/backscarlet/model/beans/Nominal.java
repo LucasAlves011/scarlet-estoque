@@ -31,4 +31,14 @@ public class Nominal {
     @Column(name = "GG")
     private int GG;
 
+    public Nominal(int p, int m, int g, int gg) {
+        P = p;
+        M = m;
+        G = g;
+        GG = gg;
+    }
+
+    public Nominal() {
+
+    }
 }
