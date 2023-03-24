@@ -41,14 +41,14 @@ public class CategoriaService {
     }
 
     public void deleteCategoria(String nome) throws ObjectNotFoundException {
-        var x = Optional.ofNullable(categoriaRepository.findByNome(nome))
+        var x = Optional.ofNullable(categoriaRepository.findByNomeOrderByNome(nome))
                 .orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada de nome'" + nome + "' não encontrada."));
         categoriaRepository.delete(x);
     }
 
     public String alterarCategoria(String nomeAntigo,String nomeNovo) throws ObjectNotFoundException,IllegalArgumentException{
         verificarValidadeCategoria(nomeNovo);
-        var x = Optional.ofNullable(categoriaRepository.findByNome(nomeAntigo)).orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada de nome'" + nomeAntigo +"' não encontrada."));
+        var x = Optional.ofNullable(categoriaRepository.findByNomeOrderByNome(nomeAntigo)).orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada de nome'" + nomeAntigo +"' não encontrada."));
         x.setNome(nomeNovo.toUpperCase());
         categoriaRepository.save(x);
         return x.toString();

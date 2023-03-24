@@ -37,7 +37,7 @@ public class ProdutoController {
     @PostMapping("/cadastro")
     public ResponseEntity<ProdutoDTO> cadastrarProduto(@RequestParam("produto") String produto , @RequestParam("imagem") MultipartFile imagem , @RequestParam String tipo) throws JsonProcessingException {
 
-
+        // TODO : COLOCAR TODAS ESSAS LÓGICAS NO SERVICE
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(produto);
         var nome = node.get("nome").asText();
@@ -76,7 +76,7 @@ public class ProdutoController {
                 input = new ProdutoInputDTO(nome,marca,valor,categorias,tipo,null,new Numerico(t36,t38,t40,t42,t44,t46,t48,t50),null);
                 break;
             case "AVULSO":
-                var quantidade = node.get("avulso").get("quantidade").asInt();
+                var quantidade = node.get("avulso").asInt();
                 input = new ProdutoInputDTO(nome,marca,valor,categorias,tipo,null,null, new Avulso(quantidade));
                 break;
         }

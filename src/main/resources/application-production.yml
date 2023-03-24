@@ -21,3 +21,5 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     defaultZone: http://localhost:8761/eureka
+
+

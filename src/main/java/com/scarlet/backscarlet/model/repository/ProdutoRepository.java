@@ -26,7 +26,7 @@ public interface ProdutoRepository extends JpaRepository<Produto,Integer> {
     @Query("select p from produto p where p.nome like %:nome%")
     List<Produto> findByNomeLike(@Param("nome") String nome);
 
-    @Query("select distinct marca from produto where marca is not null")
+    @Query("select distinct marca from produto where marca is not null order by marca")
     List<String> findAllMarcas();
 
     List<Produto> findByMarca(String marca);
