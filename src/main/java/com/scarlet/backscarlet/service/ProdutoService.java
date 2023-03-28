@@ -8,6 +8,7 @@ import com.scarlet.backscarlet.model.enums.Tipo;
 import com.scarlet.backscarlet.model.repository.CategoriaRepository;
 import com.scarlet.backscarlet.model.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +24,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class ProdutoService {
 
-    private static final String imagens = "C:\\Users\\lucas\\OneDrive\\Imagens\\Imagens Scarlet\\";
+    @Value("${app.pasta-fotos}")
+    private String imagens;
 
     private final ProdutoRepository produtoRepository;
     private final CategoriaRepository categoriaRepository;

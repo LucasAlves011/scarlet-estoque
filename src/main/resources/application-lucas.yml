@@ -6,7 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     url: jdbc:postgresql://localhost:5432/scarlet-estoque
-    password: biohazard7
+    password: lucas123
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
@@ -21,3 +21,6 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     defaultZone: http://localhost:8761/eureka
+
+app:
+  pasta-fotos: C:\\Users\\lucas\\OneDrive\\Imagens\\Imagens Scarlet\\
