@@ -5,51 +5,55 @@ import com.scarlet.backscarlet.controller.exceptions.UnidadesIndisponiveisExcept
 import com.scarlet.backscarlet.model.beans.Item;
 import com.scarlet.backscarlet.model.beans.SolicitarItem;
 import com.scarlet.backscarlet.model.beans.Tamanho;
-import com.scarlet.backscarlet.model.beans.Venda;
-import com.scarlet.backscarlet.model.dto.VendaDTO;
-import com.scarlet.backscarlet.model.enums.TipoPagamento;
 import com.scarlet.backscarlet.model.repository.ItemRepository;
 import com.scarlet.backscarlet.model.repository.ProdutoRepository;
 import com.scarlet.backscarlet.model.repository.TamanhoRepository;
-import com.scarlet.backscarlet.model.repository.VendaRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class VendaService {
 
     private final List<Tamanho> tamanhosEmMemoria;
-    private final VendaRepository vendaRepository;
     private final ProdutoRepository produtoRepository;
     private final ItemRepository itemRepository;
 
-    public VendaService(VendaRepository vendaRepository,ProdutoRepository produtoRepository,ItemRepository itemRepository, TamanhoRepository tamanhoRepository) {
-        this.vendaRepository = vendaRepository;
+    public VendaService(ProdutoRepository produtoRepository,ItemRepository itemRepository, TamanhoRepository tamanhoRepository) {
         this.produtoRepository = produtoRepository;
         this.itemRepository = itemRepository;
         this.tamanhosEmMemoria = tamanhoRepository.findAll();
     }
 
-    public VendaDTO fecharVenda(List<SolicitarItem> itens, TipoPagamento tipoPagamento) throws ObjectNotFoundException{
-        var x = itens.stream().map(this::transformarSolicitarEmItem).collect(Collectors.toList());
-        var venda = new Venda();
-        venda.setItens(x);
-        venda.setTipoPagamento(tipoPagamento);
-        venda.setTotal(x.stream().mapToDouble((c) -> c.getProduto().getValor()*c.getUnidades()).sum());
-        x.stream().map(Item::getProduto).forEach(produtoRepository::save);
-        venda.setData_hora(LocalDateTime.now());
-        itemRepository.saveAll(x);
-        vendaRepository.save(venda);
-        x.forEach(Item::retirarDoEstoque);
-        return new VendaDTO(venda);
+    public boolean verificarSeItens(List<SolicitarItem> itens) throws ObjectNotFoundException, UnidadesIndisponiveisException {
+         if (itens.stream().allMatch(this::verificarSeItem)){
+             //retirar produtos do estoque
+             itens.stream().forEach(solicitarItem -> {
+                 var produto = produtoRepository.findById(solicitarItem.getProdutoId()).orElseThrow(
+                         () -> new ObjectNotFoundException("Produto de id '"+ solicitarItem.getProdutoId() +"' não encontrado."));
+
+                 var tamanho = tamanhosEmMemoria.stream().filter( t -> t.verificarPorNome(solicitarItem.getTamanho().toString())).findFirst().get();
+
+                 produto.retirarEstoque(tamanho,solicitarItem.getQuantidade());
+                 produtoRepository.save(produto);
+             });
+             return true;
+         }
+         return false;
+    }
+
+    private boolean verificarSeItem(SolicitarItem solicitarItem) throws ObjectNotFoundException, UnidadesIndisponiveisException {
+        var produto = produtoRepository.findById(solicitarItem.getProdutoId()).orElseThrow(
+                () -> new ObjectNotFoundException("Produto de id '"+ solicitarItem.getProdutoId() +"' não encontrado."));
+
+//        var tamanho = tamanhosEmMemoria.stream().filter( t -> t.verificarPorNome(solicitarItem.getTamanho().toString( ))).findFirst().get();
+        List.of("P","M","G","GG","T36", "T38", "T40", "T42", "T44", "T46", "T48", "T50", "AVULSO").stream().filter( t -> t.equals(solicitarItem.getTamanho().toString())).findFirst().get();
+        return produto.verificarDisponibilidade(solicitarItem.getTamanho(),solicitarItem.getQuantidade());
     }
 
     private Item transformarSolicitarEmItem(SolicitarItem solicitarItem){
-        var produto = produtoRepository.findById(solicitarItem.getIdProduto()).orElseThrow(
-                () -> new ObjectNotFoundException("Produto de id '"+ solicitarItem.getIdProduto() +"' não encontrado."));
+        var produto = produtoRepository.findById(solicitarItem.getProdutoId()).orElseThrow(
+                () -> new ObjectNotFoundException("Produto de id '"+ solicitarItem.getProdutoId() +"' não encontrado."));
 
         var tamanho = tamanhosEmMemoria.stream().filter( t -> t.verificarPorNome(solicitarItem.getTamanho().toString())).findFirst().get();
 

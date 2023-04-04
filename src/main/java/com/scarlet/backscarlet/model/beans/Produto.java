@@ -63,12 +63,12 @@ public class Produto {
 
     public boolean verificarDisponibilidade(TamanhoEnum tamanhoEnum, int unidades) throws ObjectNotFoundException, TamanhoIncompativelException {
 
-        if (tamanhoEnum == null) {
+        if (tamanhoEnum == TamanhoEnum.AVULSO) {
             if (this.getAvulso() == null)
                 throw new TamanhoIncompativelException("Não é possível adicionar o tamanho " + Optional.ofNullable(tamanhoEnum.getTamanho()).orElse("")
                         + "para um produto que esta cadastrado como um avulso.");
             return this.getAvulso().getQuantidade() >= unidades;
-        } else if (tamanhoEnum.equals(TamanhoEnum.P) || tamanhoEnum.equals(TamanhoEnum.M) | tamanhoEnum.equals(TamanhoEnum.G) || tamanhoEnum.equals(TamanhoEnum.GG)) {
+        } else if (tamanhoEnum.equals(TamanhoEnum.P) || tamanhoEnum.equals(TamanhoEnum.M) || tamanhoEnum.equals(TamanhoEnum.G) || tamanhoEnum.equals(TamanhoEnum.GG)) {
             if (this.getNominal() == null)
                 throw new TamanhoIncompativelException("Não é possível adicionar o tamanho " + tamanhoEnum.getTamanho()
                         + " para um produto que esta cadastrado com tamanhos (36/38/40/42...)");
@@ -109,14 +109,14 @@ public class Produto {
                 }
             } else if (getNumerico() != null) {
                 switch (tamanho.getTamanho()) {
-                    case "36" -> getNumerico().setT36(getNumerico().getT36() - unidades);
-                    case "38" -> getNumerico().setT38(getNumerico().getT38() - unidades);
-                    case "40" -> getNumerico().setT40(getNumerico().getT40() - unidades);
-                    case "42" -> getNumerico().setT42(getNumerico().getT42() - unidades);
-                    case "44" -> getNumerico().setT44(getNumerico().getT44() - unidades);
-                    case "46" -> getNumerico().setT46(getNumerico().getT46() - unidades);
-                    case "48" -> getNumerico().setT48(getNumerico().getT48() - unidades);
-                    case "50" -> getNumerico().setT50(getNumerico().getT50() - unidades);
+                    case "T36" -> getNumerico().setT36(getNumerico().getT36() - unidades);
+                    case "T38" -> getNumerico().setT38(getNumerico().getT38() - unidades);
+                    case "T40" -> getNumerico().setT40(getNumerico().getT40() - unidades);
+                    case "T42" -> getNumerico().setT42(getNumerico().getT42() - unidades);
+                    case "T44" -> getNumerico().setT44(getNumerico().getT44() - unidades);
+                    case "T46" -> getNumerico().setT46(getNumerico().getT46() - unidades);
+                    case "T48" -> getNumerico().setT48(getNumerico().getT48() - unidades);
+                    case "T50" -> getNumerico().setT50(getNumerico().getT50() - unidades);
                 }
             }
         } catch (NullPointerException x) {
