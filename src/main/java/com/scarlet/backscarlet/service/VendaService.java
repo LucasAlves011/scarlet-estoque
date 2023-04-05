@@ -19,48 +19,48 @@ public class VendaService {
     private final ProdutoRepository produtoRepository;
     private final ItemRepository itemRepository;
 
-    public VendaService(ProdutoRepository produtoRepository,ItemRepository itemRepository, TamanhoRepository tamanhoRepository) {
+    public VendaService(ProdutoRepository produtoRepository, ItemRepository itemRepository, TamanhoRepository tamanhoRepository) {
         this.produtoRepository = produtoRepository;
         this.itemRepository = itemRepository;
         this.tamanhosEmMemoria = tamanhoRepository.findAll();
     }
 
     public boolean verificarSeItens(List<SolicitarItem> itens) throws ObjectNotFoundException, UnidadesIndisponiveisException {
-         if (itens.stream().allMatch(this::verificarSeItem)){
-             //retirar produtos do estoque
-             itens.stream().forEach(solicitarItem -> {
-                 var produto = produtoRepository.findById(solicitarItem.getProdutoId()).orElseThrow(
-                         () -> new ObjectNotFoundException("Produto de id '"+ solicitarItem.getProdutoId() +"' não encontrado."));
+        if (itens.stream().allMatch(this::verificarSeItem)) {
+            //retirar produtos do estoque
+            itens.stream().forEach(solicitarItem -> {
+                var produto = produtoRepository.findById(solicitarItem.getProdutoId()).orElseThrow(
+                        () -> new ObjectNotFoundException("Produto de id '" + solicitarItem.getProdutoId() + "' não encontrado."));
 
-                 var tamanho = tamanhosEmMemoria.stream().filter( t -> t.verificarPorNome(solicitarItem.getTamanho().toString())).findFirst().get();
+                var tamanho = tamanhosEmMemoria.stream().filter(t -> t.verificarPorNome(solicitarItem.getTamanho().toString())).findFirst().get();
 
-                 produto.retirarEstoque(tamanho,solicitarItem.getQuantidade());
-                 produtoRepository.save(produto);
-             });
-             return true;
-         }
-         return false;
+                produto.retirarEstoque(tamanho, solicitarItem.getQuantidade());
+                produtoRepository.save(produto);
+            });
+            return true;
+        }
+        return false;
     }
 
     private boolean verificarSeItem(SolicitarItem solicitarItem) throws ObjectNotFoundException, UnidadesIndisponiveisException {
         var produto = produtoRepository.findById(solicitarItem.getProdutoId()).orElseThrow(
-                () -> new ObjectNotFoundException("Produto de id '"+ solicitarItem.getProdutoId() +"' não encontrado."));
+                () -> new ObjectNotFoundException("Produto de id '" + solicitarItem.getProdutoId() + "' não encontrado."));
 
 //        var tamanho = tamanhosEmMemoria.stream().filter( t -> t.verificarPorNome(solicitarItem.getTamanho().toString( ))).findFirst().get();
-        List.of("P","M","G","GG","T36", "T38", "T40", "T42", "T44", "T46", "T48", "T50", "AVULSO").stream().filter( t -> t.equals(solicitarItem.getTamanho().toString())).findFirst().get();
-        return produto.verificarDisponibilidade(solicitarItem.getTamanho(),solicitarItem.getQuantidade());
+        List.of("P", "M", "G", "GG", "T36", "T38", "T40", "T42", "T44", "T46", "T48", "T50", "AVULSO").stream().filter(t -> t.equals(solicitarItem.getTamanho().toString())).findFirst().get();
+        return produto.verificarDisponibilidade(solicitarItem.getTamanho(), solicitarItem.getQuantidade());
     }
 
-    private Item transformarSolicitarEmItem(SolicitarItem solicitarItem){
+    private Item transformarSolicitarEmItem(SolicitarItem solicitarItem) {
         var produto = produtoRepository.findById(solicitarItem.getProdutoId()).orElseThrow(
-                () -> new ObjectNotFoundException("Produto de id '"+ solicitarItem.getProdutoId() +"' não encontrado."));
+                () -> new ObjectNotFoundException("Produto de id '" + solicitarItem.getProdutoId() + "' não encontrado."));
 
-        var tamanho = tamanhosEmMemoria.stream().filter( t -> t.verificarPorNome(solicitarItem.getTamanho().toString())).findFirst().get();
+        var tamanho = tamanhosEmMemoria.stream().filter(t -> t.verificarPorNome(solicitarItem.getTamanho().toString())).findFirst().get();
 
-        if (produto.verificarDisponibilidade(solicitarItem.getTamanho(),solicitarItem.getQuantidade()))
+        if (produto.verificarDisponibilidade(solicitarItem.getTamanho(), solicitarItem.getQuantidade()))
             return new Item(produto, solicitarItem.getQuantidade(), tamanho);
         else
-            throw new UnidadesIndisponiveisException("Unidades do produto '" +produto.getNome()+"' no tamanho '" + solicitarItem.getTamanho()+"' são insuficientes");
+            throw new UnidadesIndisponiveisException("Unidades do produto '" + produto.getNome() + "' no tamanho '" + solicitarItem.getTamanho() + "' são insuficientes");
     }
 
 }
