@@ -10,5 +10,5 @@ spring:
     pathmatch:
       matching-strategy: ant-path-matcher
   profiles:
-    active: lucas
+    active: prod
 
