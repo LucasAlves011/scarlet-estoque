@@ -7,7 +7,6 @@ import com.scarlet.backscarlet.controller.exceptions.ObjectNotFoundException;
 import com.scarlet.backscarlet.model.beans.Avulso;
 import com.scarlet.backscarlet.model.beans.Nominal;
 import com.scarlet.backscarlet.model.beans.Numerico;
-import com.scarlet.backscarlet.model.dto.produto.DTOteste;
 import com.scarlet.backscarlet.model.dto.produto.ProdutoDTO;
 import com.scarlet.backscarlet.model.dto.produto.ProdutoInputDTO;
 import com.scarlet.backscarlet.model.dto.produto.RetornoQuantidadesPorMarca;
@@ -21,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -85,25 +83,11 @@ public class ProdutoController {
         return ResponseEntity.created(URI.create("/produto")).body(produtoService.cadastrarProduto(input,imagem));
     }
 
-//    @PostMapping("/cadastro")
-//    public ResponseEntity<ProdutoDTO> cadastrarProduto(@RequestParam("produto") ProdutoInputDTO produto , @RequestParam("imagem") MultipartFile imagem){
-//        System.out.println(produto.toString());
-//        return ResponseEntity.created(URI.create("/produto")).body(produtoService.cadastrarProduto(produto,imagem));
-//    }
-
-//    @PostMapping("/cadastro")
-//    public ResponseEntity<Void> cadastrarProduto(@ModelAttribute ProdutoInputDTO produto ){
-//        System.out.println(produto.toString());
-//        return ResponseEntity.created(URI.create("/produto")).body(null);
-//    }
-
-
-
-//    @PostMapping("/*")
-//    public ResponseEntity<Object> cadastrarProdutos(@RequestBody List<Produto> lista){
-//        produtoService.cadastrarProdutos(lista);
-//        return ResponseEntity.ok().body(null);
-//    }
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deletarProduto(@PathVariable int id) throws ObjectNotFoundException {
+        produtoService.deletarProduto(id);
+        return ResponseEntity.ok().build();
+    }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<ProdutoDTO> alterarProduto(@PathVariable int id, @RequestBody ProdutoInputDTO p) throws ObjectNotFoundException {
@@ -118,6 +102,11 @@ public class ProdutoController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Object> getProdutoPorId(@PathVariable int id) throws ObjectNotFoundException {
        return ResponseEntity.ok().body(produtoService.produtoPorId(id));
+    }
+
+    @GetMapping(value = "/nome/{id}")
+    public ResponseEntity<String> getNomeProdutoPorId(@PathVariable int id) throws ObjectNotFoundException {
+       return ResponseEntity.ok().body(produtoService.nomeProdutoPorId(id));
     }
 
     @GetMapping("/categoria")
@@ -173,14 +162,4 @@ public class ProdutoController {
     public byte[] x(@PathVariable String imagem) throws IOException{
         return Files.readAllBytes(Path.of("C:\\Users\\lucas\\OneDrive\\Imagens\\Imagens Scarlet\\"+imagem));
     }*/
-
-    @PostMapping(value = "/teste" , consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> teste(@RequestBody DTOteste produto, @RequestBody(required = false) String x){
-//        System.out.println(x);
-        System.out.println(produto.getCategorias());
-        System.out.println(produto.getMarca());
-        System.out.println(produto.getValor());
-        System.out.println(produto.getNome());
-        return ResponseEntity.ok().body(null);
-    }
 }

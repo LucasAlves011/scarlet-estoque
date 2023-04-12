@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -67,6 +68,13 @@ public class ProdutoService {
     public Object produtoPorId(int id) throws ObjectNotFoundException {
         var x = produtoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado"));
         return transformarDTO(x);
+    }
+
+    public void deletarProduto(int id){
+        var nomeImagem = produtoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado")).getImagem();
+        File file = new File(imagens + nomeImagem);
+        boolean deleted = file.delete();
+        produtoRepository.deleteById(id);
     }
 
     public ProdutoDTO alterarProduto(int id, ProdutoInputDTO novoProduto) throws ObjectNotFoundException {
@@ -203,5 +211,10 @@ public class ProdutoService {
 
     public byte[] findImage(String nome) throws IOException {
         return Files.readAllBytes(Path.of(imagens+nome));
+    }
+
+    public String nomeProdutoPorId(int id) {
+        return produtoRepository.findById(id).orElseThrow(() ->
+                new ObjectNotFoundException("Produto de id " + id + "não encontrado.")).getNome();
     }
 }

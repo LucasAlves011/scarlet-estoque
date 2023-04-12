@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Entity(name = "nominal")
 @Setter
 @Getter
+@ToString
 public class Nominal {
 
     @Id

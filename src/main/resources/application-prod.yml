@@ -19,6 +19,6 @@ eureka:
     defaultZone: http://localhost:8761/eureka
 
 app:
-  pasta-fotos: /home/ubuntu/fotosScarlet/
+  pasta-fotos: /home/lucasmnalves/fotosScarlet/
 
 

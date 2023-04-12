@@ -2,9 +2,11 @@ package com.scarlet.backscarlet.model.beans;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AccessLevel;
+import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 
 @Getter
@@ -13,6 +15,9 @@ import lombok.Setter;
 public class Categoria {
     @Id
     private String nome;
+
+    @ManyToMany(mappedBy = "categorias")
+    List<Produto> produtos;
 
     @Override
     public String toString() {

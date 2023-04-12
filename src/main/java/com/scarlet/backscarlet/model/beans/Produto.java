@@ -35,7 +35,7 @@ public class Produto {
 
     private String marca;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany()
     @JoinTable(name = "produto_categorias", joinColumns = @JoinColumn(name = "produto_id")
             , inverseJoinColumns = @JoinColumn(name = "categoria_nome"))
     private List<Categoria> categorias;
