@@ -105,7 +105,7 @@ public class ProdutoController {
     }
 
     @GetMapping(value = "/nome/{id}")
-    public ResponseEntity<String> getNomeProdutoPorId(@PathVariable int id) throws ObjectNotFoundException {
+    public ResponseEntity<String> getNomeProdutoPorId(@PathVariable int id) {
        return ResponseEntity.ok().body(produtoService.nomeProdutoPorId(id));
     }
 

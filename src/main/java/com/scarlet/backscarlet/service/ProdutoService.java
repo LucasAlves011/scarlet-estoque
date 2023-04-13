@@ -214,7 +214,12 @@ public class ProdutoService {
     }
 
     public String nomeProdutoPorId(int id) {
-        return produtoRepository.findById(id).orElseThrow(() ->
-                new ObjectNotFoundException("Produto de id " + id + "não encontrado.")).getNome();
-    }
+        String nome;
+        try {
+            nome = produtoRepository.findById(id).get().getNome();
+        } catch (ObjectNotFoundException e) {
+            nome = "Nome não encontrado";
+        }
+        return nome;
+}
 }
