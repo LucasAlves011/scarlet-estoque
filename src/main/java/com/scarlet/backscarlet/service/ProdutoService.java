@@ -221,7 +221,7 @@ public class ProdutoService {
         String nome;
         try {
             nome = produtoRepository.findById(id).get().getNome();
-        } catch (ObjectNotFoundException e) {
+        } catch (Exception e) {
             nome = "Nome não encontrado";
         }
         return nome;
