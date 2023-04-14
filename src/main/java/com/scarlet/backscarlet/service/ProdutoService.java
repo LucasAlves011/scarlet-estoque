@@ -213,6 +213,10 @@ public class ProdutoService {
         return Files.readAllBytes(Path.of(imagens+nome));
     }
 
+    public byte[] getLogo() throws IOException {
+        return Files.readAllBytes(Path.of(imagens+"logo32x.png"));
+    }
+
     public String nomeProdutoPorId(int id) {
         String nome;
         try {

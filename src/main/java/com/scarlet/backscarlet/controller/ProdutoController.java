@@ -143,6 +143,11 @@ public class ProdutoController {
         return ResponseEntity.ok().body(produtoService.findImage(imagem));
     }
 
+    @GetMapping(value = "/logo", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getLogo() throws IOException {
+        return ResponseEntity.ok().body(produtoService.getLogo());
+    }
+
 
 /*    @PostMapping(path = "/teste", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Void> a( @RequestPart Teste objeto, @RequestPart MultipartFile imagem){
