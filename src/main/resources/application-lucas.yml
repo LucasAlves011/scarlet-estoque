@@ -5,8 +5,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     username: postgres
-    url: jdbc:postgresql://localhost:5432/scarlet-estoque
-    password: lucas123
+    url: jdbc:postgresql://192.168.0.17:5432/estoque
+    password: servidor123
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:

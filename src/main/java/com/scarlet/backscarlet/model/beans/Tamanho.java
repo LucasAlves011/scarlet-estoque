@@ -16,7 +16,7 @@ public class Tamanho {
     @Id
     private String tamanho;
 
-    public boolean verificarPorNome(String nome){
+    public boolean verificarPorNome(String nome) {
         return nome.equals(this.tamanho);
     }
 }

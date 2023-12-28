@@ -3,7 +3,10 @@ package com.scarlet.backscarlet.controller;
 import com.scarlet.backscarlet.model.beans.SolicitarItem;
 import com.scarlet.backscarlet.service.VendaService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ public class EntradaSaidaController {
     }
 
     @PostMapping()
-    public ResponseEntity<Boolean> verificarItensRetirarEstoque(@RequestBody List<SolicitarItem> solicitarItemList )  {
+    public ResponseEntity<Boolean> verificarItensRetirarEstoque(@RequestBody List<SolicitarItem> solicitarItemList) {
         System.out.println(solicitarItemList);
         return ResponseEntity.ok().body(vendaService.verificarSeItens(solicitarItemList));
     }

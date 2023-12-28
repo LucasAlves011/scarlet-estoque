@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class StandardException  {
+public class StandardException {
 
     private LocalDateTime dataHoraUTC;
     private Integer status;

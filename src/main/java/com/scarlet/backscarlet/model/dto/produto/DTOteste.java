@@ -1,8 +1,5 @@
 package com.scarlet.backscarlet.model.dto.produto;
 
-import com.scarlet.backscarlet.model.beans.Avulso;
-import com.scarlet.backscarlet.model.beans.Nominal;
-import com.scarlet.backscarlet.model.beans.Numerico;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

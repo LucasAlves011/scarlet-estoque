@@ -18,7 +18,7 @@ public class Nominal {
     @Setter(AccessLevel.NONE)
     private int id;
 
-    @Column( insertable = false, updatable = false)
+    @Column(insertable = false, updatable = false)
     private int quantidade;
 
     @Column(name = "P")

@@ -59,48 +59,48 @@ public class VendaService {
 
 //        var tamanho = tamanhosEmMemoria.stream().filter( t -> t.verificarPorNome(solicitarItem.getTamanho().toString( ))).findFirst().get();
 //        List.of("P", "M", "G", "GG", "T36", "T38", "T40", "T42", "T44", "T46", "T48", "T50", "AVULSO").stream().filter(t -> t.equals(solicitarItem.getTamanho().toString())).findFirst().get();
-          switch (solicitarItem.getTamanho().toString()){
-              case "P" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.P, solicitarItem.getQuantidade());
-              }
-              case "AVULSO" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.AVULSO, solicitarItem.getQuantidade());
-              }
-              case "M" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.M, solicitarItem.getQuantidade());
-              }
-              case "G" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.G, solicitarItem.getQuantidade());
-              }
-              case "GG" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.GG, solicitarItem.getQuantidade());
-              }
-              case "T36" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.T36, solicitarItem.getQuantidade());
-              }
-              case "T38" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.T38, solicitarItem.getQuantidade());
-              }
-              case "T40" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.T40, solicitarItem.getQuantidade());
-              }
-              case "T42" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.T42, solicitarItem.getQuantidade());
-              }
-              case "T44" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.T44, solicitarItem.getQuantidade());
-              }
-              case "T46" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.T46, solicitarItem.getQuantidade());
-              }
-              case "T48" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.T48, solicitarItem.getQuantidade());
-              }
-              case "T50" -> {
-                  return produto.verificarDisponibilidade(TamanhoEnum.T50, solicitarItem.getQuantidade());
-              }
+        switch (solicitarItem.getTamanho().toString()) {
+            case "P" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.P, solicitarItem.getQuantidade());
+            }
+            case "AVULSO" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.AVULSO, solicitarItem.getQuantidade());
+            }
+            case "M" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.M, solicitarItem.getQuantidade());
+            }
+            case "G" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.G, solicitarItem.getQuantidade());
+            }
+            case "GG" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.GG, solicitarItem.getQuantidade());
+            }
+            case "T36" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.T36, solicitarItem.getQuantidade());
+            }
+            case "T38" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.T38, solicitarItem.getQuantidade());
+            }
+            case "T40" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.T40, solicitarItem.getQuantidade());
+            }
+            case "T42" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.T42, solicitarItem.getQuantidade());
+            }
+            case "T44" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.T44, solicitarItem.getQuantidade());
+            }
+            case "T46" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.T46, solicitarItem.getQuantidade());
+            }
+            case "T48" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.T48, solicitarItem.getQuantidade());
+            }
+            case "T50" -> {
+                return produto.verificarDisponibilidade(TamanhoEnum.T50, solicitarItem.getQuantidade());
+            }
 
-          }
+        }
 
 
         return produto.verificarDisponibilidade(solicitarItem.getTamanho(), solicitarItem.getQuantidade());

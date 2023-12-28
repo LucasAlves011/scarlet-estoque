@@ -33,7 +33,7 @@ public class ProdutoController {
     }
 
     @PostMapping("/cadastro")
-    public ResponseEntity<ProdutoDTO> cadastrarProduto(@RequestParam("produto") String produto , @RequestParam("imagem") MultipartFile imagem , @RequestParam String tipo) throws JsonProcessingException {
+    public ResponseEntity<ProdutoDTO> cadastrarProduto(@RequestParam("produto") String produto, @RequestParam("imagem") MultipartFile imagem, @RequestParam String tipo) throws JsonProcessingException {
 
         // TODO : COLOCAR TODAS ESSAS LÓGICAS NO SERVICE
         ObjectMapper mapper = new ObjectMapper();
@@ -48,19 +48,19 @@ public class ProdutoController {
             categorias.add(value);
         }
 
-        if ( !node.get("avulso").isNull() && !node.get("numerico").isNull() || !node.get("avulso").isNull() && !node.get("nominal").isNull() || !node.get("numerico").isNull() && !node.get("nominal").isNull() ){
+        if (!node.get("avulso").isNull() && !node.get("numerico").isNull() || !node.get("avulso").isNull() && !node.get("nominal").isNull() || !node.get("numerico").isNull() && !node.get("nominal").isNull()) {
             throw new ObjectNotFoundException("Produto deve ter apenas um tipo de tamanho");
         }
 
         ProdutoInputDTO input = null;
 
-        switch (tipo.toUpperCase()){
+        switch (tipo.toUpperCase()) {
             case "NOMINAL":
                 var p = node.get("nominal").get("p").asInt();
                 var m = node.get("nominal").get("m").asInt();
                 var g = node.get("nominal").get("g").asInt();
                 var gg = node.get("nominal").get("gg").asInt();
-                input = new ProdutoInputDTO(nome,marca,valor,categorias,tipo,new Nominal(p,m,g,gg),null,null);
+                input = new ProdutoInputDTO(nome, marca, valor, categorias, tipo, new Nominal(p, m, g, gg), null, null);
                 break;
             case "NUMERICO":
                 var t36 = node.get("numerico").get("t36").asInt();
@@ -71,16 +71,16 @@ public class ProdutoController {
                 var t46 = node.get("numerico").get("t46").asInt();
                 var t48 = node.get("numerico").get("t48").asInt();
                 var t50 = node.get("numerico").get("t50").asInt();
-                input = new ProdutoInputDTO(nome,marca,valor,categorias,tipo,null,new Numerico(t36,t38,t40,t42,t44,t46,t48,t50),null);
+                input = new ProdutoInputDTO(nome, marca, valor, categorias, tipo, null, new Numerico(t36, t38, t40, t42, t44, t46, t48, t50), null);
                 break;
             case "AVULSO":
                 var quantidade = node.get("avulso").asInt();
-                input = new ProdutoInputDTO(nome,marca,valor,categorias,tipo,null,null, new Avulso(quantidade));
+                input = new ProdutoInputDTO(nome, marca, valor, categorias, tipo, null, null, new Avulso(quantidade));
                 break;
         }
 
 
-        return ResponseEntity.created(URI.create("/produto")).body(produtoService.cadastrarProduto(input,imagem));
+        return ResponseEntity.created(URI.create("/produto")).body(produtoService.cadastrarProduto(input, imagem));
     }
 
     @DeleteMapping(value = "/{id}")
@@ -91,53 +91,54 @@ public class ProdutoController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<ProdutoDTO> alterarProduto(@PathVariable int id, @RequestBody ProdutoInputDTO p) throws ObjectNotFoundException {
-        return ResponseEntity.ok().body(produtoService.alterarProduto(id,p));
+        return ResponseEntity.ok().body(produtoService.alterarProduto(id, p));
     }
 
     @GetMapping
-    public ResponseEntity<List<Object>> getProdutos(){
+    public ResponseEntity<List<Object>> getProdutos() {
         return ResponseEntity.ok().body(produtoService.findAllProdutos());
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Object> getProdutoPorId(@PathVariable int id) throws ObjectNotFoundException {
-       return ResponseEntity.ok().body(produtoService.produtoPorId(id));
+        return ResponseEntity.ok().body(produtoService.produtoPorId(id));
     }
 
     @GetMapping(value = "/nome/{id}")
     public ResponseEntity<String> getNomeProdutoPorId(@PathVariable int id) {
-       return ResponseEntity.ok().body(produtoService.nomeProdutoPorId(id));
+        return ResponseEntity.ok().body(produtoService.nomeProdutoPorId(id));
     }
 
     @GetMapping("/categoria")
-    public ResponseEntity<List<ProdutoDTO>> findByCategoria(@PathParam("categoria") String categoria){
+    public ResponseEntity<List<ProdutoDTO>> findByCategoria(@PathParam("categoria") String categoria) {
         return ResponseEntity.ok().body(produtoService.findByCategoria(categoria));
     }
 
     @GetMapping("/nome")
-    public ResponseEntity<List<ProdutoDTO>> findProdutoByNome(@PathParam("nome") String nome){
+    public ResponseEntity<List<ProdutoDTO>> findProdutoByNome(@PathParam("nome") String nome) {
         return ResponseEntity.ok().body(produtoService.findByNome(nome));
     }
 
     @PutMapping(value = "/{id}/categorias")
     public ResponseEntity<ProdutoDTO> alterarCategorias(@PathVariable int id, @RequestBody ArrayList<String> categorias) throws ObjectNotFoundException {
-        return ResponseEntity.ok().body(produtoService.alterarCategorias(id,categorias));
+        return ResponseEntity.ok().body(produtoService.alterarCategorias(id, categorias));
     }
 
     @GetMapping(value = "/marcas")
-    public ResponseEntity<List<String>> findMarcas(){
+    public ResponseEntity<List<String>> findMarcas() {
         return ResponseEntity.ok().body(produtoService.findMarcas());
     }
 
     @GetMapping(value = "/quantidade-marcas")
-    public ResponseEntity<List<RetornoQuantidadesPorMarca>> getSeparados(){
+    public ResponseEntity<List<RetornoQuantidadesPorMarca>> getSeparados() {
         return ResponseEntity.ok().body(produtoService.marcasAndQuantidade());
     }
 
-    @GetMapping(value = "/marca/{marca}" )
-    public ResponseEntity<List<ProdutoDTO>> findProdutosByMarca(@PathVariable String marca){
+    @GetMapping(value = "/marca/{marca}")
+    public ResponseEntity<List<ProdutoDTO>> findProdutosByMarca(@PathVariable String marca) {
         return ResponseEntity.ok().body(produtoService.findByMarca(marca));
     }
+
     @GetMapping(value = "/imagem/{imagem}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> findImage(@PathVariable String imagem) throws IOException {
         return ResponseEntity.ok().body(produtoService.findImage(imagem));
@@ -146,6 +147,11 @@ public class ProdutoController {
     @GetMapping(value = "/logo", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> getLogo() throws IOException {
         return ResponseEntity.ok().body(produtoService.getLogo());
+    }
+
+    @PostMapping(value = "/tamanhos")
+    public ResponseEntity<List<String>> getTamanhos(@RequestBody List<Integer> ids) {
+        return ResponseEntity.ok().body(produtoService.getTamanhos(ids));
     }
 
 

@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Tipo {
-    NUMERICO("NUMERICO"),NOMINAL("NOMINAL"),SEM_TAMANHO("SEM_TAMANHO"),AVULSO("AVULSO");
+    NUMERICO("NUMERICO"), NOMINAL("NOMINAL"), SEM_TAMANHO("SEM_TAMANHO"), AVULSO("AVULSO");
 
     private final String descricao;
 }

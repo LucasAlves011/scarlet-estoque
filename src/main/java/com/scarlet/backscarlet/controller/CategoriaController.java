@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/categoria")
-public class CategoriaController  {
+public class CategoriaController {
 
     private final CategoriaService categoriaService;
 
@@ -20,18 +20,18 @@ public class CategoriaController  {
     }
 
     @GetMapping
-    public ResponseEntity<List<String>> getCategorias(){
-       return ResponseEntity.ok().body(categoriaService.getCategorias());
+    public ResponseEntity<List<String>> getCategorias() {
+        return ResponseEntity.ok().body(categoriaService.getCategorias());
     }
 
     @PostMapping
-    public ResponseEntity<String> cadastrarCategoria(String categoria){
-        return ResponseEntity.created(URI.create("/categoria/"+categoria)).body(categoriaService.cadastrarCategoria(categoria).toString());
+    public ResponseEntity<String> cadastrarCategoria(String categoria) {
+        return ResponseEntity.created(URI.create("/categoria/" + categoria)).body(categoriaService.cadastrarCategoria(categoria).toString());
     }
 
     @PutMapping
     public ResponseEntity<String> alterarCategoria(@PathParam("antigo") String antigo, @PathParam("novo") String novo) throws ObjectNotFoundException {
-        return ResponseEntity.ok().body(categoriaService.alterarCategoria(antigo,novo));
+        return ResponseEntity.ok().body(categoriaService.alterarCategoria(antigo, novo));
     }
 
     @DeleteMapping

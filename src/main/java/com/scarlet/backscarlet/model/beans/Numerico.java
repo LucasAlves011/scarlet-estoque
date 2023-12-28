@@ -1,7 +1,10 @@
 package com.scarlet.backscarlet.model.beans;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Entity(name = "numerico")
@@ -15,7 +18,7 @@ public class Numerico {
     @Setter(AccessLevel.NONE)
     private int id;
 
-    @Column(updatable = false,insertable = false)
+    @Column(updatable = false, insertable = false)
     private int quantidade;
 
     @Column(name = "`36`")

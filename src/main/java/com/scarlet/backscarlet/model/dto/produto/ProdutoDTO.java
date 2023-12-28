@@ -26,10 +26,10 @@ public abstract class ProdutoDTO {
     private int quantidade;
 
     public byte[] recuperarImagem(String nomeImagem) throws IOException {
-        return Files.readAllBytes(Path.of(fotos+ nomeImagem));
+        return Files.readAllBytes(Path.of(fotos + nomeImagem));
     }
 
-    public ProdutoDTO(int id,String nome, List<String> categorias, String imagemNome, double valor, int quantidade , String marca, String tipo) {
+    public ProdutoDTO(int id, String nome, List<String> categorias, String imagemNome, double valor, int quantidade, String marca, String tipo) {
 
         this.imagem = imagemNome;
         this.id = id;

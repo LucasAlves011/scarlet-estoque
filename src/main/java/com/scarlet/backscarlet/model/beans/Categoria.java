@@ -21,7 +21,7 @@ public class Categoria {
 
     @Override
     public String toString() {
-        return  nome ;
+        return nome;
     }
 
     public Categoria(String nome) {
@@ -31,7 +31,7 @@ public class Categoria {
     public Categoria() {
     }
 
-    public boolean verificarPorNome(String nome){
+    public boolean verificarPorNome(String nome) {
         return nome.equals(this.nome);
     }
 }

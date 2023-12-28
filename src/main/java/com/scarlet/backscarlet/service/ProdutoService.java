@@ -48,7 +48,7 @@ public class ProdutoService {
         var cats = p.getCategorias().stream().map(pr -> Optional.ofNullable(categoriaRepository.findByNomeOrderByNome(pr))
                         .orElseThrow(() -> new ObjectNotFoundException("Categoria de nome " + pr + " não é uma categoria cadastrada.")))
                 .collect(Collectors.toList());
-        var pr = transformarProduto(p,cats);
+        var pr = transformarProduto(p, cats);
 
         try {
             byte[] bytes = image.getBytes();
@@ -56,7 +56,7 @@ public class ProdutoService {
             Path caminhoImagem = Paths.get(imagens + uuidImagem + ".png");
             Files.write(caminhoImagem, bytes);
 
-            pr.setImagem(uuidImagem+".png");
+            pr.setImagem(uuidImagem + ".png");
         } catch (IOException e) {
             System.err.println("Erro em cadastrar a imagem do produto.");
         }
@@ -70,7 +70,7 @@ public class ProdutoService {
         return transformarDTO(x);
     }
 
-    public void deletarProduto(int id){
+    public void deletarProduto(int id) {
         var nomeImagem = produtoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado")).getImagem();
         File file = new File(imagens + nomeImagem);
         boolean deleted = file.delete();
@@ -161,8 +161,8 @@ public class ProdutoService {
             throw new RuntimeException("Qualquer coisa"); //TODO: melhorar essa exceptions
     }
 
-    private Produto transformarProduto(ProdutoInputDTO p, List<Categoria> categorias){
-       var t =  new Produto();
+    private Produto transformarProduto(ProdutoInputDTO p, List<Categoria> categorias) {
+        var t = new Produto();
         t.setNome(p.getNome());
         t.setAvulso(p.getAvulso());
         t.setNominal(p.getNominal());
@@ -170,7 +170,7 @@ public class ProdutoService {
         t.setMarca(p.getMarca() == null ? null : p.getMarca().toUpperCase());
         t.setValor(p.getValor());
 
-        switch (p.getTipo().toUpperCase()){
+        switch (p.getTipo().toUpperCase()) {
             case "AVULSO" -> t.setTipo(Tipo.AVULSO);
             case "NOMINAL" -> t.setTipo(Tipo.NOMINAL);
             case "NUMERICO" -> t.setTipo(Tipo.NUMERICO);
@@ -188,15 +188,15 @@ public class ProdutoService {
         return produtoRepository.findAllMarcas();
     }
 
-    public List<RetornoQuantidadesPorMarca> marcasAndQuantidade(){
+    public List<RetornoQuantidadesPorMarca> marcasAndQuantidade() {
         var c = new ArrayList<RetornoQuantidadesPorMarca>();
         var data = produtoRepository.findAll();
         var marcas = produtoRepository.findAllMarcas();
 
         marcas.forEach(e -> {
-           var qtdProdutos = data.stream().filter( f -> f.getMarca() != null && f.getMarca().equals(e)).count();
-           var unidades = data.stream().filter( f -> f.getMarca() != null && f.getMarca().equals(e)).mapToInt(Produto::getUnidades).sum();
-           c.add(new RetornoQuantidadesPorMarca(e,qtdProdutos,unidades));
+            var qtdProdutos = data.stream().filter(f -> f.getMarca() != null && f.getMarca().equals(e)).count();
+            var unidades = data.stream().filter(f -> f.getMarca() != null && f.getMarca().equals(e)).mapToInt(Produto::getUnidades).sum();
+            c.add(new RetornoQuantidadesPorMarca(e, qtdProdutos, unidades));
         });
 
         var nulos = data.stream().filter(e -> e.getMarca() == null).toList();
@@ -205,16 +205,16 @@ public class ProdutoService {
         return c;
     }
 
-    public List<ProdutoDTO> findByMarca(String marca){
+    public List<ProdutoDTO> findByMarca(String marca) {
         return produtoRepository.findByMarca(marca).stream().map(this::transformarDTO).toList();
     }
 
     public byte[] findImage(String nome) throws IOException {
-        return Files.readAllBytes(Path.of(imagens+nome));
+        return Files.readAllBytes(Path.of(imagens + nome));
     }
 
     public byte[] getLogo() throws IOException {
-        return Files.readAllBytes(Path.of(imagens+"logo32x.png"));
+        return Files.readAllBytes(Path.of(imagens + "logo32x.png"));
     }
 
     public String nomeProdutoPorId(int id) {
@@ -225,5 +225,9 @@ public class ProdutoService {
             nome = "Nome não encontrado";
         }
         return nome;
-}
+    }
+
+    public List<String> getTamanhos(List<Integer> ids) {
+        return categoriaRepository.findAllProdutoWithCategorias(ids);
+    }
 }
